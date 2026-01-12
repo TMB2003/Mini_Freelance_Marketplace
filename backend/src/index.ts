@@ -12,8 +12,9 @@ app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/", (_req, res) => {
-    res.send("Hello World!");
+
+app.get('/', (_req, res) => {
+    res.json({ status: 'ok', service: 'Mini Freelance Marketplace API' });
 });
 app.use("/api", router);
 
