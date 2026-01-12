@@ -2,33 +2,8 @@ import type { Request, Response } from "express";
 import { Gig } from "../model/gig.js";
 import TryCatch from "../tryCatch.js";
 
-export const getGigs = TryCatch(async (req: Request, res: Response) => {
-    const search = typeof req.query['search'] === 'string' ? req.query['search'] : undefined;
-    const minBudgetRaw = typeof req.query['minBudget'] === 'string' ? req.query['minBudget'] : undefined;
-    const maxBudgetRaw = typeof req.query['maxBudget'] === 'string' ? req.query['maxBudget'] : undefined;
-
-    const minBudget = minBudgetRaw !== undefined ? Number(minBudgetRaw) : undefined;
-    const maxBudget = maxBudgetRaw !== undefined ? Number(maxBudgetRaw) : undefined;
-
-    const query: {
-        status: string;
-        title?: { $regex: string; $options: string };
-        budget?: { $gte?: number; $lte?: number };
-    } = { status: 'open' };
-        
-    if (search) {
-        query.title = { $regex: search, $options: 'i' };
-    }
-
-    if (minBudget !== undefined && !Number.isNaN(minBudget)) {
-        query.budget = { ...(query.budget ?? {}), $gte: minBudget };
-    }
-
-    if (maxBudget !== undefined && !Number.isNaN(maxBudget)) {
-        query.budget = { ...(query.budget ?? {}), $lte: maxBudget };
-    }
-
-    const gigs = await Gig.find(query)
+export const getGigs = TryCatch(async (_req: Request, res: Response) => {
+    const gigs = await Gig.find({ status: 'open' })
         .populate('ownerId', 'name email')
         .sort({ createdAt: -1 });
     return res.json(gigs);
