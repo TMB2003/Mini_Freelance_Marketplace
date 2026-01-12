@@ -40,7 +40,10 @@ const App = () => {
               }
             />
 
-            <Route path="/gigs" element={<Gigs />} />
+            <Route 
+              path="/gigs" 
+              element={isAuthenticated ? <Gigs /> : <Navigate to="/login" replace />} 
+            />
             <Route
               path="/gigs/new"
               element={isAuthenticated ? <PostGig /> : <Navigate to="/login" replace />}
