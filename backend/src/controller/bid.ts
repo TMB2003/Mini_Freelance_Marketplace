@@ -2,6 +2,7 @@ import mongoose, { Types } from "mongoose";
 import { Bid } from "../model/bid.js";
 import { Gig } from "../model/gig.js";
 import TryCatch from "../tryCatch.js";
+import { getIO } from "../socket.js";
 
 // Extend Express Request type to include user
 declare global {
@@ -140,8 +141,8 @@ export const hireBid = TryCatch(async (req, res) => {
                 throw new Error('This bid is no longer available for hiring');
             }
 
-            // Update the bid status to accepted
-            bid.status = 'accepted';
+            // Update the bid status to hired
+            bid.status = 'hired';
             await bid.save({ session });
 
             // Update the gig status and set the hired freelancer
@@ -168,6 +169,23 @@ export const hireBid = TryCatch(async (req, res) => {
             .populate('gigId', 'title status')
             .populate('freelancerId', 'name email')
             .lean();
+
+        try {
+            const gig = updatedBid?.gigId as any;
+            const freelancer = updatedBid?.freelancerId as any;
+
+            const freelancerId = typeof freelancer === 'string' ? freelancer : freelancer?._id;
+            const gigTitle = typeof gig === 'string' ? undefined : gig?.title;
+
+            if (freelancerId) {
+                getIO().to(`user:${freelancerId}`).emit('hired', {
+                    gigId: typeof gig === 'string' ? gig : gig?._id,
+                    gigTitle: gigTitle ?? 'a project',
+                });
+            }
+        } catch {
+            // ignore socket errors
+        }
 
         return res.json({ 
             message: 'Freelancer hired successfully',

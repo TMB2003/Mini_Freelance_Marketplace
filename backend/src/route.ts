@@ -2,6 +2,7 @@ import express from "express";
 import { login, register } from "./controller/register.js";
 import { getGigs, createGig } from "./controller/gig.js";
 import { createBid, getGigBids, hireBid } from "./controller/bid.js";
+import { getChatGigs, getGigMessages } from "./controller/chat.js";
 import { requireAuth } from "./middleware/auth.js";
 
 const router = express.Router();
@@ -18,5 +19,9 @@ router.post('/gigs', requireAuth, createGig);
 router.post('/bids', requireAuth, createBid);
 router.get('/bids/:gigId', requireAuth, getGigBids);
 router.patch('/bids/:bidId/hire', requireAuth, hireBid);
+
+// Chat routes
+router.get('/chat/gigs', requireAuth, getChatGigs);
+router.get('/chat/:gigId/messages', requireAuth, getGigMessages);
 
 export default router;

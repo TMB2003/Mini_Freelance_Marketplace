@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login as loginService, register as registerService } from '../services/auth';
+import { disconnectSocket } from '../services/socket';
 
 export const useAuth = () => {
   const [loading, setLoading] = useState(false);
@@ -38,6 +39,7 @@ export const useAuth = () => {
   };
 
   const logout = () => {
+    disconnectSocket();
     localStorage.removeItem('token');
     window.dispatchEvent(new Event('auth-changed'));
     navigate('/login');

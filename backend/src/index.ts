@@ -4,6 +4,8 @@ import router from "./route.js";
 import { connectDB } from "./connectDB.js";
 dotenv.config();
 import cors from "cors";
+import http from "http";
+import { initSocket } from "./socket.js";
 
 const app = express();
 app.use(cors());
@@ -13,7 +15,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api", router);
 
 const port = process.env['PORT'] || 3000;
-app.listen(port, () => {
+
+const server = http.createServer(app);
+initSocket(server);
+
+server.listen(port, () => {
     console.log(`Server started on port ${port}`);
     connectDB();
 });

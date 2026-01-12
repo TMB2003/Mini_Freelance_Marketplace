@@ -32,7 +32,7 @@ const bidSchema = new Schema<IBid>({
     },
     status: {
         type: String,
-        enum: ['pending', 'accepted', 'rejected'],
+        enum: ['pending', 'hired', 'rejected'],
         default: 'pending'
     }
 }, {

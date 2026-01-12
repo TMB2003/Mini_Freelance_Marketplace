@@ -1,10 +1,8 @@
 // src/components/Layout/Navbar.tsx
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
-import { useAuth } from '../../hooks/useAuth';
 
 const Navbar = () => {
-  const { logout } = useAuth();
   const location = useLocation();
   const isAuthenticated = !!localStorage.getItem('token');
   const onAuthPages = location.pathname === '/login' || location.pathname === '/register';
@@ -20,19 +18,21 @@ const Navbar = () => {
         {!onAuthPages && (
           <Box>
             <Button color="inherit" component={RouterLink} to="/gigs">
-              Browse Gigs
+              Home
             </Button>
+            {isAuthenticated && (
+              <Button color="inherit" component={RouterLink} to="/chat">
+                Chat
+              </Button>
+            )}
             {isAuthenticated && (
               <Button color="inherit" component={RouterLink} to="/gigs/new">
                 Post Job
               </Button>
             )}
-            <Button color="inherit" component={RouterLink} to="/gigs">
-              Home
-            </Button>
             {isAuthenticated && (
-              <Button color="inherit" onClick={logout}>
-                Logout
+              <Button color="inherit" component={RouterLink} to="/profile">
+                Profile
               </Button>
             )}
           </Box>

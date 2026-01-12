@@ -7,9 +7,10 @@ import theme from './theme';
 import Layout from './components/Layout/Layout'; 
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
 import Gigs from './pages/Gigs';
 import PostGig from './pages/PostGig';
+import Profile from './pages/Profile';
+import Chat from './pages/Chat';
 
 const queryClient = new QueryClient();
 
@@ -44,6 +45,11 @@ const App = () => {
               path="/gigs/new"
               element={isAuthenticated ? <PostGig /> : <Navigate to="/login" replace />}
             />
+
+            <Route
+              path="/profile"
+              element={isAuthenticated ? <Profile /> : <Navigate to="/login" replace />}
+            />
             <Route
               path="/login"
               element={isAuthenticated ? <Navigate to="/gigs" replace /> : <Login />}
@@ -52,9 +58,10 @@ const App = () => {
               path="/register"
               element={isAuthenticated ? <Navigate to="/gigs" replace /> : <Register />}
             />
+
             <Route
-              path="/dashboard"
-              element={<Navigate to="/gigs" replace />}
+              path="/chat"
+              element={isAuthenticated ? <Chat /> : <Navigate to="/login" replace />}
             />
             {/* Add more protected routes here */}
           </Route>
