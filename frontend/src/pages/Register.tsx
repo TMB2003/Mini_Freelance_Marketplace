@@ -1,6 +1,6 @@
 // src/pages/Register.tsx
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { fieldErrorsFromZod, registerSchema } from '../schemas';
 import {
@@ -19,7 +19,6 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const { register, loading, error } = useAuth();
-  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

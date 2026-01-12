@@ -233,7 +233,6 @@ const Gigs = () => {
             {sortedGigs.map((gig) => {
               const owner = typeof gig.ownerId === 'string' ? undefined : gig.ownerId;
               const ownerName = owner?.name ?? 'Unknown owner';
-              const ownerEmail = owner?.email;
               const ownerInitials = owner?.name
                 ? owner.name
                     .split(' ')
