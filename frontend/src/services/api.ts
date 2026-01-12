@@ -1,7 +1,8 @@
 // src/services/api.ts
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/api';
+const API_BASE_URL = process.env.REACT_API_URL ?? 'http://localhost:3000';
+const API_URL = `https://mini-freelance-marketplace-taha-balapurwalas-projects.vercel.app/api`;
 
 const api = axios.create({
   baseURL: API_URL,

@@ -1,5 +1,6 @@
 import { io, Socket } from 'socket.io-client';
 
+const API_BASE_URL = 'https://mini-freelance-marketplace-taha-balapurwalas-projects.vercel.app';
 type HiredEventPayload = {
   gigId?: string;
   gigTitle: string;
@@ -19,7 +20,7 @@ type ClientToServerEvents = AnyEventMap & {
 
 let socket: Socket<ServerToClientEvents, ClientToServerEvents> | null = null;
 
-const SOCKET_URL = 'http://localhost:3000';
+const SOCKET_URL = API_BASE_URL;
 
 export const getSocket = () => socket;
 

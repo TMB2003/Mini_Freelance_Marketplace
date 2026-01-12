@@ -4,7 +4,19 @@ import router from "./route.js";
 
 const app = express();
 
-app.use(cors());
+// Allow all origins
+app.use(
+  cors({
+    origin: true,          
+    methods: ["GET","POST","PUT","DELETE","OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true       
+  })
+);
+
+// Preflight for all routes
+app.options("*", cors());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
