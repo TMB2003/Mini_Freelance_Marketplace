@@ -1,6 +1,6 @@
 import { io, Socket } from 'socket.io-client';
 
-const API_BASE_URL = process.env.REACT_API_URL ?? 'http://localhost:3000';
+const API_BASE_URL = process.env.REACT_API_URL;
 type HiredEventPayload = {
   gigId?: string;
   gigTitle: string;
