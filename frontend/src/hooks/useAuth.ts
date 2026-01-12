@@ -15,7 +15,7 @@ export const useAuth = () => {
       const { token } = await loginService({ email, password });
       localStorage.setItem('token', token);
       window.dispatchEvent(new Event('auth-changed'));
-      navigate('/dashboard', { replace: true });
+      navigate('/gigs', { replace: true });
     } catch (err: any) {
       setError(err.response?.data?.message || 'An error occurred during login');
     } finally {

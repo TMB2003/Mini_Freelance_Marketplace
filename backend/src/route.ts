@@ -2,6 +2,7 @@ import express from "express";
 import { login, register } from "./controller/register.js";
 import { getGigs, createGig } from "./controller/gig.js";
 import { createBid, getGigBids, hireBid } from "./controller/bid.js";
+import { requireAuth } from "./middleware/auth.js";
 
 const router = express.Router();
 
@@ -10,12 +11,12 @@ router.post('/auth/register', register);
 router.post('/auth/login', login);
 
 // Gig routes
-router.get('/api/gigs', getGigs);
-router.post('/api/gigs', createGig);
+router.get('/gigs', getGigs);
+router.post('/gigs', requireAuth, createGig);
 
 // Bid routes
-router.post('/api/bids', createBid);
-router.get('/api/bids/:gigId', getGigBids);
-router.patch('/api/bids/:bidId/hire', hireBid);
+router.post('/bids', requireAuth, createBid);
+router.get('/bids/:gigId', requireAuth, getGigBids);
+router.patch('/bids/:bidId/hire', requireAuth, hireBid);
 
 export default router;

@@ -4,6 +4,7 @@ export interface IBid extends Document {
     gigId: Types.ObjectId;
     freelancerId: Types.ObjectId;
     message: string;
+    amount?: number;
     status: string;
     createdAt: Date;
     updatedAt: Date;
@@ -24,6 +25,10 @@ const bidSchema = new Schema<IBid>({
         type: String,
         required: true,
         trim: true
+    },
+    amount: {
+        type: Number,
+        min: 0
     },
     status: {
         type: String,

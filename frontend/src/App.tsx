@@ -8,6 +8,8 @@ import Layout from './components/Layout/Layout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import Gigs from './pages/Gigs';
+import PostGig from './pages/PostGig';
 
 const queryClient = new QueryClient();
 
@@ -33,24 +35,26 @@ const App = () => {
             <Route
               path="/"
               element={
-                isAuthenticated ? (
-                  <Navigate to="/dashboard" replace />
-                ) : (
-                  <Navigate to="/login" replace />
-                )
+                <Navigate to="/gigs" replace />
               }
+            />
+
+            <Route path="/gigs" element={<Gigs />} />
+            <Route
+              path="/gigs/new"
+              element={isAuthenticated ? <PostGig /> : <Navigate to="/login" replace />}
             />
             <Route
               path="/login"
-              element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />}
+              element={isAuthenticated ? <Navigate to="/gigs" replace /> : <Login />}
             />
             <Route
               path="/register"
-              element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Register />}
+              element={isAuthenticated ? <Navigate to="/gigs" replace /> : <Register />}
             />
             <Route
               path="/dashboard"
-              element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />}
+              element={<Navigate to="/gigs" replace />}
             />
             {/* Add more protected routes here */}
           </Route>

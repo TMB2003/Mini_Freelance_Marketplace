@@ -15,7 +15,7 @@ declare global {
 }
 
 export const createBid = TryCatch(async(req, res) => {
-    const { gigId, message } = req.body;
+    const { gigId, message, amount } = req.body;
         
     if (!req.user) {
         return res.status(401).json({ message: 'Not authenticated' });
@@ -25,6 +25,11 @@ export const createBid = TryCatch(async(req, res) => {
 
     if (!gigId || !message) {
         return res.status(400).json({ message: 'Gig ID and message are required' });
+    }
+
+    const amountNumber = amount === undefined ? undefined : (typeof amount === 'number' ? amount : Number(amount));
+    if (amountNumber !== undefined && (Number.isNaN(amountNumber) || amountNumber < 0)) {
+        return res.status(400).json({ message: 'Bid amount cannot be negative' });
     }
 
     if (!Types.ObjectId.isValid(gigId)) {
@@ -52,6 +57,7 @@ export const createBid = TryCatch(async(req, res) => {
         gigId: new Types.ObjectId(gigId),
         freelancerId: new Types.ObjectId(freelancerId),
         message,
+        amount: amountNumber,
         status: 'pending' as const
     });
 
@@ -139,7 +145,7 @@ export const hireBid = TryCatch(async (req, res) => {
             await bid.save({ session });
 
             // Update the gig status and set the hired freelancer
-            gig.status = 'in_progress';
+            gig.status = 'assigned';
             gig.hiredFreelancerId = bid.freelancerId;
             await gig.save({ session });
 

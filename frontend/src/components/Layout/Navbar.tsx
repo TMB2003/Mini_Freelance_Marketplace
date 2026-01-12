@@ -19,8 +19,16 @@ const Navbar = () => {
         </Typography>
         {!onAuthPages && (
           <Box>
-            <Button color="inherit" component={RouterLink} to="/dashboard">
-              Dashboard
+            <Button color="inherit" component={RouterLink} to="/gigs">
+              Browse Gigs
+            </Button>
+            {isAuthenticated && (
+              <Button color="inherit" component={RouterLink} to="/gigs/new">
+                Post Job
+              </Button>
+            )}
+            <Button color="inherit" component={RouterLink} to="/gigs">
+              Home
             </Button>
             {isAuthenticated && (
               <Button color="inherit" onClick={logout}>

@@ -3,7 +3,7 @@ import mongoose, { Document, Schema, Types } from "mongoose";
 export interface IGig extends Document {
     title: string;
     description?: string;
-    budget: string;
+    budget: number;
     ownerId: Types.ObjectId;
     hiredFreelancerId?: Types.ObjectId;
     status: string;
@@ -22,7 +22,7 @@ const gigSchema = new Schema<IGig>({
         trim: true
     },
     budget: {
-        type: String,
+        type: Number,
         required: true
     },
     ownerId: {
@@ -36,7 +36,7 @@ const gigSchema = new Schema<IGig>({
     },
     status: {
         type: String,
-        enum: ['open', 'in_progress', 'completed', 'cancelled'],
+        enum: ['open', 'assigned'],
         default: 'open'
     }
 }, {

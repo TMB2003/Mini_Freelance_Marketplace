@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { fieldErrorsFromZod, loginSchema } from '../schemas';
 import {
   Box,
   Button,
@@ -15,12 +16,21 @@ import {
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const { login, loading, error } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    login(email, password);
+
+    const result = loginSchema.safeParse({ email, password });
+    if (!result.success) {
+      setFieldErrors(fieldErrorsFromZod(result.error));
+      return;
+    }
+
+    setFieldErrors({});
+    login(result.data.email, result.data.password);
   };
 
   return (
@@ -62,7 +72,12 @@ const Login = () => {
               autoComplete="email"
               autoFocus
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: '' }));
+              }}
+              error={!!fieldErrors.email}
+              helperText={fieldErrors.email || ' '}
             />
             <TextField
               margin="normal"
@@ -74,7 +89,12 @@ const Login = () => {
               id="password"
               autoComplete="current-password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (fieldErrors.password) setFieldErrors((prev) => ({ ...prev, password: '' }));
+              }}
+              error={!!fieldErrors.password}
+              helperText={fieldErrors.password || ' '}
             />
             <Button
               type="submit"
