@@ -4,7 +4,7 @@ import router from "./route.js";
 
 const app = express();
 
-/* ✅ CORS FIRST */
+/* 1️⃣ CORS FIRST */
 app.use(
   cors({
     origin: process.env["CLIENT_URL"],
@@ -14,8 +14,14 @@ app.use(
   })
 );
 
-/* ✅ Let cors handle preflight */
-app.options("*", cors());
+/* 2️⃣ HARD STOP for preflight (NO AUTH) */
+app.use((req, res, next) => {
+  if (req.method === "OPTIONS") {
+    res.sendStatus(204);
+    return;
+  }
+  next();
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -24,7 +30,7 @@ app.get("/", (_req, res) => {
   res.json({ status: "ok" });
 });
 
-/* ✅ Routes AFTER CORS */
+/* 3️⃣ Routes AFTER CORS + OPTIONS */
 app.use("/api", router);
 
 export default app;
